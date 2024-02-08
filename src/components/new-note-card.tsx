@@ -29,8 +29,8 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   function handleSaveNote(event: FormEvent) {
     event.preventDefault();
 
-    if(content == ''){
-        return
+    if (content == "") {
+      return;
     }
 
     onNoteCreated(content);
@@ -41,47 +41,47 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   }
 
   function handleStartRecording() {
-    const isSpeechRecognitionAPIAvaliable = 'SpeechRecognition' in window
-        || 'webkitSpeechRecognition' in window;
+    const isSpeechRecognitionAPIAvaliable =
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
 
-    if(!isSpeechRecognitionAPIAvaliable){
-        alert('Infelizmente seu navegador não suporta a API de gravação!')
-        return
+    if (!isSpeechRecognitionAPIAvaliable) {
+      alert("Infelizmente seu navegador não suporta a API de gravação!");
+      return;
     }
 
     setIsRecording(true);
     setShouldShowOnBoarding(false);
 
-    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognitionAPI =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     speechRecognition = new SpeechRecognitionAPI();
 
-    speechRecognition.lang = 'pt-BR';
+    speechRecognition.lang = "pt-BR";
     speechRecognition.continuous = true;
     speechRecognition.maxAlternatives = 1;
     speechRecognition.interimResults = true;
 
     speechRecognition.onresult = (event) => {
-        const transcription = Array.from(event.results).reduce((text, result) => {
-            return text.concat(result[0].transcript)
-        }, '')
+      const transcription = Array.from(event.results).reduce((text, result) => {
+        return text.concat(result[0].transcript);
+      }, "");
 
-        setContent(transcription);
-    }
+      setContent(transcription);
+    };
 
     speechRecognition.onerror = (event) => {
-        console.error(event);
-    }
+      console.error(event);
+    };
 
     speechRecognition.start();
-
   }
 
-  function handleStopRecording(){
+  function handleStopRecording() {
     setIsRecording(false);
 
-    if(speechRecognition != null){
-        speechRecognition.stop();
+    if (speechRecognition != null) {
+      speechRecognition.stop();
     }
   }
 
@@ -100,7 +100,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="insert-0 fixed bg-black/50" />
 
-        <Dialog.Content className="fixed left-1/2 overflow-hidden top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[640px] w-full h-[60vh] bg-slate-700 rounded-md flex flex-col outline-none">
+        <Dialog.Content className="fixed overflow-hidden inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] w-full md:h-[60vh] bg-slate-700 md:rounded-md flex flex-col outline-none">
           <Dialog.Close className="absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 hover:text-slate-100">
             <X className="size-5" />
           </Dialog.Close>
